@@ -1,0 +1,96 @@
+CERTIDÃO NEGATIVA — gerador de texto a partir da certidão de valor venal
+Versão 3.1.0 · 26/10/2026 (visual com a logo; regras iguais à 3.0.0)
+=======================================================================
+
+COMO USAR
+1. Descompacte a pasta inteira (não separe o index.html da pasta utils).
+2. Dê dois cliques em index.html. Abre no Chrome, Edge ou Firefox.
+3. Arraste o PDF da certidão para a área indicada (ou clique nela).
+4. Confira as verificações e os campos, e clique em "Copiar texto".
+
+Não precisa de internet nem de instalação. O PDF é lido no próprio
+computador e não é enviado para nenhum lugar. Não usa IA nem API.
+
+ESTRUTURA
+  index.html                  página principal
+  LEIA-ME.txt                 este arquivo
+  utils/css/style.css         visual e layout responsivo (CSS grid)
+  utils/js/config-regras.js   TODAS as regras (edite só aqui)
+  utils/js/extrator.js        lê o PDF e encontra os campos no texto
+  utils/js/motor.js           aplica as regras e monta o texto final
+  utils/js/app.js             liga a tela às regras
+  utils/img/logo.svg          logo (topo da página e ícone da aba)
+  utils/fonts/                fonte Outfit (licença OFL)
+  utils/vendor/pdfjs/         leitor de PDF da Mozilla (licença Apache 2.0)
+
+TEXTO PADRÃO
+  A) IDENTIFICAÇÃO DO LOTE: O lote 08, da quadra “E-5”, com a área de
+  250,00m², localizado na Rua Augusto Hog, número 465, no local denominado
+  JARDIM PRESIDENTE DUTRA. Inscrição Cadastral: 092.24.33.0130.00.000.
+
+  B) PROPRIETÁRIA INDICADA PELO SOLICITANTE: KATSUYOSHI YAMACOTI.
+
+TODAS AS REGRAS
+  Do arquivo negativa-text.md
+  R1  Validade: a certidão precisa ter "Esta certidão tem validade para
+      todo o exercício - <ANO>" com o ano vigente. Senão, o texto não é
+      gerado.
+  R2  Fração ideal 100% ou 0,00%: texto normal. Qualquer outro valor:
+      inclui "ATENÇÃO. Podem haver mais inscrições cadastrais para serem
+      relatadas." logo após o número da inscrição cadastral.
+  R3  Sem quadra e lote: "A) IDENTIFICAÇÃO DO LOTE: Uma área de ...".
+  R4  Número antigo: ", antigo 93B" logo após o número atual.
+      "Antigo NÃO HÁ": não inclui.
+  R5  Abreviações no loteamento e no logradouro por extenso:
+      JD Jardim, PQ Parque, V Vila, R Rua, AV Avenida, CID Cidade,
+      EST Estrada, AL Alameda, TV Travessa, PÇ Praça, CONJ Conjunto,
+      RES Residencial, STO Santo, STA Santa.
+      Fora da lista ou ambígua: mantém como está e avisa.
+
+  Pedidas depois do .md
+  R6  CD = Cidade.
+  R7  Sem número e sem número antigo: a numeração é omitida.
+      "... localizado na Rua Cana Verde, no local denominado ..."
+  R8  Só o número antigo: mostra só o antigo.
+      "... localizado na Rua Cana Verde, antigo 93B, no local denominado ..."
+
+  Adicionais de segurança
+  A1  O ano vigente vem do relógio do computador.
+  A2  Sem a frase de validade: bloqueia.
+  A3  Arquivo que não é certidão de valor venal: bloqueia.
+  A4  Trava de segurança: valor fora do formato esperado fica em branco,
+      com aviso. Nenhuma informação que não foi pedida entra no texto.
+  A5  Só lote OU só quadra: modelo "Uma área" e aviso para conferir.
+  A6  Avisos: compromissário, complemento preenchido, mais de um lote,
+      lote "P/" (parte de lote), campo obrigatório faltando.
+  A7  PDF escaneado (sem texto selecionável): aviso para digitar os dados.
+  PC  "PC" também vira Praça (mesma abreviação sem cedilha).
+      "V" e "R" só são expandidas no início do nome; "EST" no loteamento
+      (Estrada ou Estância) é mantida com aviso.
+
+  Formatação (deduzida dos exemplos do .md)
+  F1  Quadra entre aspas curvas “E-5”; área "250,00m²"; logradouro com
+      iniciais maiúsculas; loteamento e proprietário em MAIÚSCULAS;
+      acentos mantidos como estão na certidão.
+
+CORES
+As cores ficam no início de utils/css/style.css (seção "Cores e medidas"):
+  --brand     vermelho da logo (#A62221): botões, ícones, destaques
+  --leaf      verde da logo (#6A892A): confirmações ("Válida", "Tudo certo")
+
+AJUSTAR REGRAS
+Tudo fica em utils/js/config-regras.js, dividido em 5 seções:
+  1. extracao   onde cada dado é encontrado no texto do PDF
+  2. validacao  trava de segurança: o que cada campo pode conter
+  3. regras     regras acima (abreviações, numeração, fração etc.)
+  4. modelos    o texto A) e B)
+  5. mensagens  avisos da tela
+Salve e recarregue a página (F5).
+
+Se algum campo não for encontrado em uma certidão, abra o painel
+"Texto lido do PDF" na página: ele mostra exatamente o texto em que a
+busca é feita.
+
+PUBLICAR NA REDE (opcional)
+A pasta funciona em qualquer servidor de arquivos estáticos (servidor
+interno, GitHub Pages, Netlify etc.). Basta enviar a pasta inteira.
