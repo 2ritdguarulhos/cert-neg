@@ -1,0 +1,147 @@
+CERTIDÃO NEGATIVA — gerador de texto a partir da certidão de valor venal
+Versão 3.3.0 · 26/10/2026
+=======================================================================
+
+COMO USAR
+1. Descompacte a pasta inteira (não separe o index.html da pasta utils).
+2. Dê dois cliques em index.html (Chrome, Edge ou Firefox), ou publique a
+   pasta inteira num servidor (ex.: GitHub Pages).
+3. Arraste o PDF da certidão de valor venal para a área indicada.
+4. Confira as verificações e os campos.
+5. "Copiar texto" copia só a descrição (A e B).
+   "Baixar certidão" gera o documento completo no modelo do cartório:
+     - escolha o formato: .rtf ou .odt
+     - escolha a circunscrição: 73 ou 77 (obrigatório a cada certidão)
+     - clique em Baixar.
+
+Não precisa de internet nem de instalação. O PDF é lido no próprio
+computador e não é enviado para nenhum lugar. Não usa IA nem API.
+
+ESTRUTURA
+  index.html                       página principal
+  LEIA-ME.txt                      este arquivo
+  utils/css/style.css              visual, cores e layout responsivo (CSS grid)
+  utils/js/config-regras.js        TODAS as regras e opções (edite só aqui)
+  utils/js/extrator.js             lê o PDF e encontra os campos no texto
+  utils/js/motor.js                aplica as regras e monta o texto final
+  utils/js/exportar.js             gera o .rtf e o .odt a partir do modelo
+  utils/js/modelo-certidao.js      modelo do cartório (gerado — não editar)
+  utils/js/app.js                  liga a tela às regras
+  utils/img/logo.svg               logo (topo da página e ícone da aba)
+  utils/fonts/                     fonte Outfit (licença OFL)
+  utils/vendor/pdfjs/              leitor de PDF da Mozilla (licença Apache 2.0)
+  ferramentas/modelo-original.odt  modelo do cartório (MODELO - DOWNLOAD.odt)
+  ferramentas/preparar_modelo.py   transforma o .odt em modelo-certidao.js
+
+TEXTO PADRÃO (descrição)
+  A) IDENTIFICAÇÃO DO LOTE: O lote 08, da quadra “E-5”, com a área de
+  250,00m², localizado na Rua Augusto Hog, número 465, no local denominado
+  JARDIM PRESIDENTE DUTRA. Inscrição Cadastral: 092.24.33.0130.00.000.
+
+  B) PROPRIETÁRIA INDICADA PELO SOLICITANTE: KATSUYOSHI YAMACOTI.
+
+DOCUMENTO BAIXADO
+  CERTIDÃO NEGATIVA
+  O 2º Oficial ... protocolo número [INSERIR], datado de [INSERIR], ...
+  descrito pelo solicitante como:
+
+  A) ... (texto gerado)
+
+  B) ... (texto gerado)
+
+  CERTIFICA MAIS ... desde 31 de agosto de 1.973 (73)
+                 ou desde 01 de janeiro de 1.973 (77) ...
+
+  NADA MAIS quanto ao pedido feito. O referido é verdade e dá fé.
+
+  Fonte, negrito, margens e espaçamento vêm do modelo. Os marcadores
+  <INSERÇÃO DA DESCRIÇÃO> e <TROCA_73_77> não aparecem no documento.
+
+TODAS AS REGRAS
+  Do arquivo negativa-text.md
+  R1  Validade: a certidão precisa ter "Esta certidão tem validade para
+      todo o exercício - <ANO>" com o ano vigente. Senão, o texto não é
+      gerado.
+  R2  Fração ideal 100% ou 0,00%: texto normal. Qualquer outro valor:
+      inclui "ATENÇÃO. Podem haver mais inscrições cadastrais para serem
+      relatadas." logo após o número da inscrição cadastral.
+  R3  Sem quadra e lote: "A) IDENTIFICAÇÃO DO LOTE: Uma área de ...".
+  R4  Número antigo: ", antigo 93B" logo após o número atual.
+      "Antigo NÃO HÁ": não inclui.
+  R5  Abreviações no loteamento e no logradouro por extenso:
+      JD Jardim, PQ Parque, V Vila, R Rua, AV Avenida, CID Cidade,
+      EST Estrada, AL Alameda, TV Travessa, PÇ Praça, CONJ Conjunto,
+      RES Residencial, STO Santo, STA Santa.
+      Fora da lista ou ambígua: mantém como está e avisa.
+
+  Pedidas depois do .md
+  R6  CD = Cidade.
+  R7  Sem número e sem número antigo: a numeração é omitida.
+      "... localizado na Rua Cana Verde, no local denominado ..."
+  R8  Só o número antigo: mostra só o antigo.
+      "... localizado na Rua Cana Verde, antigo 93B, no local denominado ..."
+  R9  Download em .rtf ou .odt no modelo do cartório: o texto gerado entra
+      no lugar de <INSERÇÃO DA DESCRIÇÃO>. Nome: negativa_<inscrição>.rtf
+      (ou .odt). O formato escolhido fica lembrado neste navegador.
+  R10 Protocolo e data saem como "[INSERIR]" (arquivo para arquivo, não é
+      a certidão final).
+  R11 Seletor 73 / 77: o parágrafo "CERTIFICA MAIS" escolhido entra logo
+      abaixo da descrição, no lugar do bloco <TROCA_73_77>.
+
+  Adicionais de segurança
+  A1  O ano vigente vem do relógio do computador.
+  A2  Sem a frase de validade: bloqueia.
+  A3  Arquivo que não é certidão de valor venal: bloqueia.
+  A4  Trava de segurança: valor fora do formato esperado fica em branco,
+      com aviso. Nenhuma informação que não foi pedida entra no texto.
+  A5  Só lote OU só quadra: modelo "Uma área" e aviso para conferir.
+  A6  Avisos: compromissário, complemento preenchido, mais de um lote,
+      lote "P/" (parte de lote), campo obrigatório faltando.
+  A7  PDF escaneado (sem texto selecionável): aviso para digitar os dados.
+  A8  O download só sai depois de escolher 73 ou 77; a escolha volta a
+      ficar em branco a cada nova certidão.
+      Também: "PC" vira Praça (mesma abreviação sem cedilha); "V" e "R" só
+      são expandidas no início do nome; "EST" no loteamento (Estrada ou
+      Estância) é mantida com aviso.
+
+  Formatação
+  F1  Quadra entre aspas curvas “E-5”; área "250,00m²"; logradouro com
+      iniciais maiúsculas; loteamento e proprietário em MAIÚSCULAS;
+      acentos mantidos como estão na certidão.
+  F2  Negrito igual ao modelo: "A) IDENTIFICAÇÃO DO LOTE", "lote 08,",
+      "quadra “E-5”", loteamento, "B) PROPRIETÁRIA INDICADA PELO
+      SOLICITANTE", nome do proprietário, "CERTIFICA MAIS" e "ATENÇÃO.".
+      Nos modelos de texto do config-regras.js, **assim** = negrito.
+
+TROCAR O MODELO DO CARTÓRIO
+1. Edite ferramentas/modelo-original.odt no LibreOffice ou no Word
+   (mantenha os marcadores <INSERÇÃO DA DESCRIÇÃO> e o bloco
+   <TROCA_73_77> ... </TROCA_73_77>).
+2. Na pasta do site, rode (precisa de Python 3 e LibreOffice):
+      python3 ferramentas/preparar_modelo.py ferramentas/modelo-original.odt
+3. O arquivo utils/js/modelo-certidao.js é recriado. Publique de novo.
+Os textos do 73 e do 77 ficam em config-regras.js, seção 6 "exportacao".
+
+CORES
+No início de utils/css/style.css (seção "Cores e medidas"):
+  --brand     vermelho da logo (#A62221): botões, ícones, destaques
+  --leaf      verde da logo (#6A892A): confirmações ("Válida", "Tudo certo")
+
+AJUSTAR REGRAS
+Tudo fica em utils/js/config-regras.js, dividido em 6 seções:
+  1. extracao    onde cada dado é encontrado no texto do PDF
+  2. validacao   trava de segurança: o que cada campo pode conter
+  3. regras      regras acima (abreviações, numeração, fração etc.)
+  4. modelos     o texto A) e B)
+  5. mensagens   avisos da tela
+  6. exportacao  download, nome do arquivo e textos do 73 / 77
+Salve e recarregue a página (F5).
+
+Se algum campo não for encontrado em uma certidão, abra o painel
+"Texto lido do PDF" na página: ele mostra exatamente o texto em que a
+busca é feita.
+
+PUBLICAR NA REDE
+A pasta funciona em qualquer servidor de arquivos estáticos (servidor
+interno, GitHub Pages, Netlify etc.). Envie a pasta inteira e substitua
+TODOS os arquivos da versão anterior.
