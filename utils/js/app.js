@@ -13,8 +13,19 @@
   const MODELO = "utils/js/modelo-certidao.js";
   const CHAVE_FORMATO = "certidao.formato";
 
-  if (!C || !window.Extrator || !window.Motor || !window.Exportar) {
-    document.body.innerHTML = '<p style="padding:32px;font-family:sans-serif">Arquivos da pasta <b>utils/js</b> não encontrados. Mantenha a pasta <b>utils</b> ao lado do index.html.</p>';
+  // Se algum arquivo não carregou, diz qual — e o motivo mais provável.
+  const faltando = [["config-regras.js", C], ["extrator.js", window.Extrator], ["motor.js", window.Motor], ["exportar.js", window.Exportar]]
+    .filter(([, ok]) => !ok).map(([nome]) => nome);
+  if (faltando.length) {
+    const soConfig = faltando.length === 1 && faltando[0] === "config-regras.js";
+    document.body.innerHTML = '<div style="padding:32px;font-family:sans-serif;max-width:720px;line-height:1.5">' +
+      "<h2 style=\"margin:0 0 8px\">A página não pôde ser carregada</h2>" +
+      "<p>Não foi possível carregar: <b>utils/js/" + faltando.join("</b>, <b>utils/js/") + "</b>.</p>" +
+      (soConfig
+        ? "<p>O arquivo existe, mas provavelmente tem um erro de digitação depois da última edição (uma aspa, vírgula ou chave faltando). " +
+          "Abra o Console do navegador (F12) para ver a linha do erro.</p>"
+        : "<p>Confira se a pasta <b>utils</b> está ao lado do index.html e se os caminhos no index.html começam com <b>utils/</b> (sem <b>../</b>).</p>") +
+      "</div>";
     return;
   }
 

@@ -1,5 +1,5 @@
 CERTIDÃO NEGATIVA — gerador de texto a partir da certidão de valor venal
-Versão 3.3.0 · 26/10/2026
+Versão 3.3.1 · 26/10/2026
 =======================================================================
 
 COMO USAR
@@ -50,7 +50,7 @@ DOCUMENTO BAIXADO
   B) ... (texto gerado)
 
   CERTIFICA MAIS ... desde 31 de agosto de 1.973 (73)
-                 ou desde 01 de janeiro de 1.973 (77) ...
+                 ou desde 01 de janeiro de 1.977 (77) ...
 
   NADA MAIS quanto ao pedido feito. O referido é verdade e dá fé.
 
@@ -145,3 +145,15 @@ PUBLICAR NA REDE
 A pasta funciona em qualquer servidor de arquivos estáticos (servidor
 interno, GitHub Pages, Netlify etc.). Envie a pasta inteira e substitua
 TODOS os arquivos da versão anterior.
+  - O index.html e a pasta utils ficam lado a lado. Os caminhos no
+    index.html começam com "utils/" (sem "../"). Com "../" o navegador
+    procura os arquivos FORA da pasta do site e nada carrega.
+  - No GitHub Pages, cada commit leva cerca de 1 minuto para ser
+    publicado. Depois disso, recarregue com Ctrl+F5.
+
+SE A PÁGINA MOSTRAR "A página não pôde ser carregada"
+  - Ela diz qual arquivo falhou.
+  - Se for config-regras.js logo depois de uma edição: falta uma aspa,
+    vírgula ou chave. Aperte F12 → Console para ver a linha do erro.
+    Dica: no texto entre aspas, abra e feche com " ... " e termine a
+    linha com vírgula quando vier outra opção depois.

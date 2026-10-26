@@ -1,6 +1,6 @@
 /* ==========================================================================
    CONFIGURAÇÃO DE REGRAS — Certidões Negativas a partir da Certidão de Valor Venal
-   Versão 3.3.0 · 26/10/2026 · sem IA: regras fixas, tudo dentro do navegador.
+   Versão 3.3.1 · 26/10/2026 · sem IA: regras fixas, tudo dentro do navegador.
    ==========================================================================
 
    Este é o ÚNICO arquivo que você precisa editar para mudar regras.
@@ -64,7 +64,7 @@
    ========================================================================== */
 
 window.CONFIG_REGRAS = {
-  versao: "3.3.0",
+  versao: "3.3.1",
   atualizadoEm: "2026-10-26",
 
   /* ========================================================================
@@ -323,7 +323,8 @@ window.CONFIG_REGRAS = {
     nomeArquivoSemInscricao: "negativa_{data}",
 
     /* [USR R11] Bloco <TROCA_73_77>: o parágrafo escolhido entra logo abaixo
-       da descrição. Os textos abaixo foram copiados do modelo. */
+       da descrição. Texto do 73 copiado do modelo; no 77 o ano é 1.977
+       (ajuste feito no site publicado). Atenção às aspas e vírgulas ao editar. */
     troca: {
       exigirEscolha: true,     // [ADC A8] sem escolha, o download não sai
       opcoes: {
@@ -332,8 +333,8 @@ window.CONFIG_REGRAS = {
           texto: "**CERTIFICA MAIS** e finalmente, que o imóvel supra, está compreendido nesta circunscrição, desde 31 de agosto de 1.973, sendo anteriormente da competência do 1º Oficial de Registro de Imóveis local."
         },
         "77": {
-          dica: "desde 01 de janeiro de 1.977,
-          texto: "**CERTIFICA MAIS** e finalmente, que o imóvel supra, está compreendido nesta circunscrição, desde 01 de janeiro de 1.973, sendo anteriormente da competência do 1º Oficial de Registro de Imóveis local."
+          dica: "desde 01 de janeiro de 1.977",
+          texto: "**CERTIFICA MAIS** e finalmente, que o imóvel supra, está compreendido nesta circunscrição, desde 01 de janeiro de 1.977, sendo anteriormente da competência do 1º Oficial de Registro de Imóveis local."
         }
       }
     }
